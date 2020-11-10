@@ -11,7 +11,6 @@ const number = document.querySelector("span");
 //reducer이 return하는 건 전부 data가 된다.
 // action은 redux에서 함수를 부를때 쓰는 두번째 parameter or argument이다
 const countModifier = (count = 0, action) => {
-  console.log("count =>", count + "action => ", action);
   if (action.type === "ADD") {
     return count + 1;
   } else if (action.type === "MINUS") {
@@ -22,10 +21,23 @@ const countModifier = (count = 0, action) => {
 //스토어를 만들면 리듀서를 달라고 요청함
 const countStore = createStore(countModifier);
 
-countStore.dispatch({ type: "ADD" });
-countStore.dispatch({ type: "ADD" });
-countStore.dispatch({ type: "MINUS" });
-console.log(countStore.getState());
+number.innerText = 0;
+
+const onchange = () => {
+  number.innerText = countStore.getState();
+};
+
+countStore.subscribe(onchange);
+const handleAdd = () => {
+  countStore.dispatch({ type: "ADD" });
+};
+
+const handleMinus = () => {
+  countStore.dispatch({ type: "MINUS" });
+};
+
+add.addEventListener("click", handleAdd);
+minus.addEventListener("click", handleMinus);
 
 //스토어를 통해 메시지를 보내려면 dispatch를 사용하면 된다. 그리고
 //전송한 값을 action에 넣고 action을 체크해보면 된다.
